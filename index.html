@@ -2,8 +2,8 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Abdullah Faizal weds Hayurun Silmiya — A Royal Celebration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Abdullah Faizal weds Hayurun Silmiya — A Royal Celebration | May 10, 2026</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -85,6 +85,11 @@
     }
     body:has(a:hover) .cursor-ring,
     body:has(button:hover) .cursor-ring { width: 52px; height: 52px; opacity: .35; }
+
+    @media (hover: none) and (pointer: coarse) {
+      .cursor, .cursor-ring { display: none; }
+      body { cursor: auto; }
+    }
 
     /* ============================================================
        FLOATING PARTICLES CANVAS
@@ -1055,7 +1060,7 @@
         <span class="weds">weds</span>
         <span class="name-bride">HAYURUN SILMIYA</span>
       </h1>
-      <p class="hero-date">📅 &nbsp; May 3, 2026 &nbsp; • &nbsp; 12:00 PM &nbsp; • &nbsp; Pettai, Tirunelveli</p>
+      <p class="hero-date">📅 &nbsp; May 10, 2026 &nbsp; • &nbsp; 12:00 PM &nbsp; • &nbsp; Pettai, Tirunelveli</p>
       <a href="#couple" class="btn-primary">
         ✦ View Invitation
       </a>
@@ -1130,7 +1135,7 @@
         <div class="event-card glass-card reveal">
           <div class="event-icon icon-date">📅</div>
           <h3>Date</h3>
-          <p>May 3, 2026</p>
+          <p>May 10, 2026</p>
           <span>Sunday — An auspicious day</span>
         </div>
         <div class="event-card glass-card reveal" style="transition-delay:.15s">
@@ -1251,7 +1256,7 @@
 
       <div class="location-info reveal">
         <div class="loc-badge">📍 Pettai, Tirunelveli - 627004</div>
-        <div class="loc-badge">📅 May 3, 2026</div>
+        <div class="loc-badge">📅 May 10, 2026</div>
         <div class="loc-badge">🕛 12:00 PM onwards</div>
         <div class="loc-badge">🚗 Ample Parking Available</div>
       </div>
@@ -1291,12 +1296,14 @@
     let mx = -100, my = -100, rx = -100, ry = -100;
     document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
     (function animCursor() {
-      cursor.style.left = mx + 'px';
-      cursor.style.top  = my + 'px';
-      rx += (mx - rx) * .12;
-      ry += (my - ry) * .12;
-      cursorRing.style.left = rx + 'px';
-      cursorRing.style.top  = ry + 'px';
+      if (cursor && cursorRing) {
+        cursor.style.left = mx + 'px';
+        cursor.style.top  = my + 'px';
+        rx += (mx - rx) * .12;
+        ry += (my - ry) * .12;
+        cursorRing.style.left = rx + 'px';
+        cursorRing.style.top  = ry + 'px';
+      }
       requestAnimationFrame(animCursor);
     })();
 
@@ -1309,10 +1316,12 @@
     /* ── Mobile menu ── */
     const ham = document.getElementById('hamburger');
     const mob = document.getElementById('mobileMenu');
-    ham.addEventListener('click', () => mob.classList.toggle('open'));
-    mob.querySelectorAll('.mob-link').forEach(a => {
-      a.addEventListener('click', () => mob.classList.remove('open'));
-    });
+    if (ham && mob) {
+      ham.addEventListener('click', () => mob.classList.toggle('open'));
+      mob.querySelectorAll('.mob-link').forEach(a => {
+        a.addEventListener('click', () => mob.classList.remove('open'));
+      });
+    }
 
     /* ── Theme toggle ── */
     const themeBtn = document.getElementById('themeBtn');
@@ -1335,6 +1344,7 @@
     /* ── Floating Particles Canvas ── */
     (function initParticles() {
       const canvas = document.getElementById('particles-canvas');
+      if (!canvas) return;
       const ctx    = canvas.getContext('2d');
       let W, H, particles = [];
 
@@ -1408,7 +1418,7 @@
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
 
     /* ── Countdown ── */
-    const weddingDate = new Date('2026-05-03T12:00:00');
+    const weddingDate = new Date('2026-05-10T12:00:00');
     const cdDays  = document.getElementById('cd-days');
     const cdHours = document.getElementById('cd-hours');
     const cdMins  = document.getElementById('cd-mins');
@@ -1420,10 +1430,10 @@
       const diff = weddingDate - now;
 
       if (diff <= 0) {
-        cdDays.textContent  = '00';
-        cdHours.textContent = '00';
-        cdMins.textContent  = '00';
-        cdSecs.textContent  = '00';
+        if (cdDays) cdDays.textContent = '00';
+        if (cdHours) cdHours.textContent = '00';
+        if (cdMins) cdMins.textContent = '00';
+        if (cdSecs) cdSecs.textContent = '00';
         return;
       }
 
@@ -1433,6 +1443,7 @@
       const secs  = Math.floor((diff % 6e4)   / 1e3);
 
       function update(el, val) {
+        if (!el) return;
         const v = pad(val);
         if (el.textContent !== v) {
           el.classList.add('flip');
@@ -1449,11 +1460,15 @@
     setInterval(updateCountdown, 1000);
 
     /* ── RSVP Form ── */
-    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      this.style.display = 'none';
-      document.getElementById('rsvpSuccess').classList.add('show');
-    });
+    const rsvpForm = document.getElementById('rsvpForm');
+    if (rsvpForm) {
+      rsvpForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        this.style.display = 'none';
+        const successDiv = document.getElementById('rsvpSuccess');
+        if (successDiv) successDiv.classList.add('show');
+      });
+    }
 
     /* ── Parallax on hero rings ── */
     window.addEventListener('mousemove', (e) => {
@@ -1468,20 +1483,22 @@
       });
     });
 
-    /* ── 3D Tilt on glass cards ── */
-    document.querySelectorAll('.glass-card, .event-card, .couple-card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const rect   = card.getBoundingClientRect();
-        const cx     = rect.left + rect.width  / 2;
-        const cy     = rect.top  + rect.height / 2;
-        const dx     = (e.clientX - cx) / (rect.width  / 2);
-        const dy     = (e.clientY - cy) / (rect.height / 2);
-        card.style.transform = `perspective(800px) rotateX(${-dy * 6}deg) rotateY(${dx * 6}deg) translateY(-6px)`;
+    /* ── 3D Tilt on glass cards (desktop only) ── */
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.querySelectorAll('.glass-card, .event-card, .couple-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect   = card.getBoundingClientRect();
+          const cx     = rect.left + rect.width  / 2;
+          const cy     = rect.top  + rect.height / 2;
+          const dx     = (e.clientX - cx) / (rect.width  / 2);
+          const dy     = (e.clientY - cy) / (rect.height / 2);
+          card.style.transform = `perspective(800px) rotateX(${-dy * 6}deg) rotateY(${dx * 6}deg) translateY(-6px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
       });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-      });
-    });
+    }
   </script>
 
 </body>
